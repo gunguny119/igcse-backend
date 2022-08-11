@@ -18,13 +18,21 @@ bucket = storage.bucket()
 
 cur_path = os.path.dirname(__file__)
 #load data
-df = pd.read_csv(f'{cur_path}/../data/data.csv')
-df = df[~df['screenshot_path'].isna()]
+all_df = {}
 
-grade_threshold = pd.read_csv(f'{cur_path}/../data/grade_thresholds.csv')
-grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F',
-                 'G']] = grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G']] / 200
-grade_threshold = grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G']].mean()
+for subject in ['chemistry','physics','biology']:
+
+    df = pd.read_csv(f'{cur_path}/../data/{subject}_data.csv')
+    df = _df[~_df['screenshot_path'].isna()]
+
+    grade_threshold = pd.read_csv(f'{cur_path}/../data/{subject}_grade_thresholds.csv')
+    grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F',
+                    'G']] = grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G']] / 200
+    grade_threshold = grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G']].mean()
+
+    all_df[subject] = {'df' : df, 'grade_threshold': grade_threshold}
+
+
 
 #https://www, if we have /generate, send our data to the url
 APP_ROOT = os.getenv('APP_ROOT', '/generate')
@@ -35,6 +43,10 @@ def generate_pastpaper():
     data = request.json
     topic_list = data.get('topics')
     options = data.get('options')  # 21, 41, 61...
+    subject = data.get('subject')
+    
+    df = all_df[subject.lower]['df']
+    grade_threshold =  all_df[subject.lower]['grade_threshold']
 
     topic_df = df[df['topic'].isin(topic_list) | (df['component'] == options[2])]
 
@@ -50,7 +62,7 @@ def generate_pastpaper():
         component2_questions.append(q.sample(1))
 
     component4_questions = []
-    for i in range(1, 7):
+    for i in range(1, 12):
         q = component4[component4['question number'] == i]
         if len(q) == 0:
             continue
@@ -73,19 +85,21 @@ def generate_pastpaper():
         'component6': component6['screenshot_path'].to_list()
     }
 
-    component2_pdf, num_questions = process_pdf(images['component2'], bucket, topic_list,
+    component2_pdf, num_questions = process_pdf(images['component2'], bucket,subject, topic_list,
                                                 options[0])
-    component4_pdf, _ = process_pdf(images['component4'], bucket, topic_list, options[1])
-    component6_pdf, _ = process_pdf(images['component6'], bucket, topic_list, options[2])
+    component4_pdf, _ = process_pdf(images['component4'], bucket,subject, topic_list, options[1])
+    component6_pdf, _ = process_pdf(images['component6'], bucket, subject,topic_list, options[2])
 
     component2_ms = component2['answer'].to_list()
     component4_ms, _ = process_pdf(component4['ms_path'].to_list(),
                                    bucket,
+                                   subject,
                                    topic_list,
                                    options[1],
                                    ms=True)
     component6_ms, _ = process_pdf(component6['ms_path'].to_list(),
                                    bucket,
+                                   subject,
                                    topic_list,
                                    options[2],
                                    ms=True)

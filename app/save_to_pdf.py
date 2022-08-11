@@ -4,14 +4,17 @@ from PIL import Image
 import numpy as np
 
 
-def process_pdf(images, bucket, selected_topics, component, ms=False):
+def process_pdf(images, bucket, selected_subject,selected_topics, component, ms=False):
     selected_topic_index = sorted([int(topic.split(' ')[0]) for topic in selected_topics])
     selected_topic_index = [str(i) for i in selected_topic_index]
 
     if ms:
         base_dir = 'marking_schemes'
+
     else:
         base_dir = 'generated_papers'
+    if selected_subject != "Chemistry":
+        base_dir = f'{base_dir}/{selected_subject}'
     if not os.path.isdir(base_dir):
         os.makedirs(base_dir)
 
