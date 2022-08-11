@@ -23,7 +23,7 @@ all_df = {}
 for subject in ['chemistry','physics','biology']:
 
     df = pd.read_csv(f'{cur_path}/../data/{subject}_data.csv')
-    df = _df[~_df['screenshot_path'].isna()]
+    df = df[~df['screenshot_path'].isna()]
 
     grade_threshold = pd.read_csv(f'{cur_path}/../data/{subject}_grade_thresholds.csv')
     grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F',
