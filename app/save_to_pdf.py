@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 
 
-def process_pdf(images, bucket, selected_subject,selected_topics, component, ms=False):
+def process_pdf(images, bucket, selected_subject, selected_topics, component, ms=False):
     selected_topic_index = sorted([int(topic.split(' ')[0]) for topic in selected_topics])
     selected_topic_index = [str(i) for i in selected_topic_index]
 
@@ -67,6 +67,13 @@ def merge_pages(images, size=(1653, 2339)):
             first = Image.fromarray(first, 'RGB')
 
         else:
+            if first.size[1] < size[1]:
+                # make 1 full page
+                first = np.concatenate([
+                    np.array(first),
+                    np.full((size[1] - first.size[1], size[0], 3), 255, dtype=np.uint8),
+                ])
+                first = Image.fromarray(first, 'RGB')
             pages.append(first)
             first = img
 
