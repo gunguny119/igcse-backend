@@ -20,8 +20,7 @@ def process_pdf(images, bucket, selected_subject, selected_topics, component, ms
 
     pdf_file_path = f'{base_dir}/component{component}_{"-".join(selected_topic_index)}.pdf'
     real_files = download_images(images, bucket)
-    if not os.path.isfile(pdf_file_path):
-        convert_to_pdf(real_files, pdf_file_path, ms=ms)
+    convert_to_pdf(real_files, pdf_file_path, ms=ms)
     upload_pdf(pdf_file_path, bucket)
 
     return pdf_file_path, len(real_files)
@@ -110,6 +109,4 @@ def convert_to_pdf(images, pdf_file_path, ms=False):
 
 def upload_pdf(pdf_file_path, bucket):
     blob = bucket.blob(pdf_file_path)
-    if blob.exists():
-        return
     blob.upload_from_filename(pdf_file_path)

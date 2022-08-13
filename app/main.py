@@ -21,6 +21,8 @@ cur_path = os.path.dirname(__file__)
 all_df = {}
 
 for subject in ['chemistry', 'physics', 'biology']:
+    if not os.path.isfiile(f'{cur_path}/../data/{subject}_data.csv'):
+        continue
     df = pd.read_csv(f'{cur_path}/../data/{subject}_data.csv')
     df = df[~df['screenshot_path'].isna()]
 
@@ -89,14 +91,14 @@ def generate_pastpaper():
     component6_pdf, _ = process_pdf(images['component6'], bucket, subject, topic_list,
                                     options[2])
 
-    component2_ms = component2['answer'].to_list()
-    component4_ms, _ = process_pdf(component4['ms_path'].to_list(),
+    component2_ms = component2[['question_number','answer']].values.to_list()
+    component4_ms, _ = process_pdf(component4['ms_path'].tolist(),
                                    bucket,
                                    subject,
                                    topic_list,
                                    options[1],
                                    ms=True)
-    component6_ms, _ = process_pdf(component6['ms_path'].to_list(),
+    component6_ms, _ = process_pdf(component6['ms_path'].tolist(),
                                    bucket,
                                    subject,
                                    topic_list,
