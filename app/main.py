@@ -91,14 +91,14 @@ def generate_pastpaper():
     component6_pdf, _ = process_pdf(images['component6'], bucket, subject, topic_list,
                                     options[2])
 
-    component2_ms = component2[['question_number','answer']].values.to_list()
-    component4_ms, _ = process_pdf(component4['ms_path'].tolist(),
+    component2_ms = component2[['question_number','answer']].values.tolist()
+    component4_ms, _ = process_pdf(component4['ms_path'].to_list(),
                                    bucket,
                                    subject,
                                    topic_list,
                                    options[1],
                                    ms=True)
-    component6_ms, _ = process_pdf(component6['ms_path'].tolist(),
+    component6_ms, _ = process_pdf(component6['ms_path'].to_list(),
                                    bucket,
                                    subject,
                                    topic_list,
