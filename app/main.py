@@ -21,7 +21,7 @@ cur_path = os.path.dirname(__file__)
 all_df = {}
 
 for subject in ['chemistry', 'physics', 'biology']:
-    if not os.path.isfiile(f'{cur_path}/../data/{subject}_data.csv'):
+    if not os.path.isfile(f'{cur_path}/../data/{subject}_data.csv'):
         continue
     df = pd.read_csv(f'{cur_path}/../data/{subject}_data.csv')
     df = df[~df['screenshot_path'].isna()]
