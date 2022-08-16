@@ -5,7 +5,8 @@ import numpy as np
 
 
 def process_pdf(images, bucket, selected_subject, selected_topics, component, ms=False):
-    selected_topic_index = sorted([int(topic.split(' ')[0]) for topic in selected_topics])
+    selected_topic_index = sorted(
+        [int(topic.split(' ')[0].replace('.', '')) for topic in selected_topics])
     selected_topic_index = [str(i) for i in selected_topic_index]
 
     if ms:
