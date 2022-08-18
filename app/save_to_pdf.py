@@ -14,7 +14,7 @@ def process_pdf(images, bucket, selected_subject, selected_topics, component, ms
 
     else:
         base_dir = 'generated_papers'
-    if selected_subject != "Chemistry":
+    if selected_subject != "chemistry":
         base_dir = f'{base_dir}/{selected_subject}'
     if not os.path.isdir(base_dir):
         os.makedirs(base_dir)

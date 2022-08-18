@@ -42,10 +42,10 @@ def generate_pastpaper():
     data = request.json
     topic_list = data.get('topics')
     options = data.get('options')  # 21, 41, 61...
-    subject = data.get('subject')
+    subject = data.get('subject').lower()
 
-    df = all_df[subject.lower()]['df']
-    grade_threshold = all_df[subject.lower()]['grade_threshold']
+    df = all_df[subject]['df']
+    grade_threshold = all_df[subject]['grade_threshold']
 
     topic_df = df[df['topic'].isin(topic_list) | (df['component'] == options[2])]
 
