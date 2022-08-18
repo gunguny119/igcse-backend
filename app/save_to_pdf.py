@@ -67,9 +67,9 @@ def merge_pages(images, size=(1653, 2339)):
         merged_height = first.size[1] + img.size[1] + 100
         if merged_height <= size[1]:
             first = np.concatenate([
-                np.array(first),
+                np.array(first)[:, :size[0]],
                 np.full((100, size[0], 3), 255, dtype=np.uint8),
-                np.array(img)
+                np.array(img)[:, :size[0]]
             ])
             first = Image.fromarray(first, 'RGB')
 
