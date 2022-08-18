@@ -47,11 +47,11 @@ def generate_pastpaper():
     df = all_df[subject]['df']
     grade_threshold = all_df[subject]['grade_threshold']
 
-    topic_df = df[df['topic'].isin(topic_list) | (df['component'].isin(61, 62, 63))]
+    topic_df = df[df['topic'].isin(topic_list) | (df['component'].isin([61, 62, 63]))]
 
-    component2 = topic_df[topic_df['component'].isin(21, 22, 23)]
-    component4 = topic_df[topic_df['component'].isin(41, 42, 43)]
-    component6 = topic_df[topic_df['component'].isin(61, 62, 63)]
+    component2 = topic_df[topic_df['component'].isin([21, 22, 23])]
+    component4 = topic_df[topic_df['component'].isin([41, 42, 43])]
+    component6 = topic_df[topic_df['component'].isin([61, 62, 63])]
 
     component2_questions = []
     for i in range(1, 41):
