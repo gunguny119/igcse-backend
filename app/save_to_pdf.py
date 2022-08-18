@@ -20,20 +20,22 @@ def process_pdf(images, bucket, selected_subject, selected_topics, component, ms
         os.makedirs(base_dir)
 
     pdf_file_path = f'{base_dir}/component{component}_{"-".join(selected_topic_index)}.pdf'
-    real_files = download_images(images, bucket)
+    real_files, idx = download_images(images, bucket)
     convert_to_pdf(real_files, pdf_file_path, ms=ms)
     upload_pdf(pdf_file_path, bucket)
 
-    return pdf_file_path, len(real_files)
+    return pdf_file_path, len(real_files), idx
 
 
 def download_images(images, bucket):
     real_files = []
-    for filename in images:  # screenshots/year/month/component/q1
+    ignore_idx = []
+    for idx, filename in enumerate(images):  # screenshots/year/month/component/q1
         if 'component2' in filename:
             real_file = filename + '.png'
             blob = bucket.blob(real_file)
             if not blob.exists():
+                ignore_idx.append(idx)
                 continue
             os.makedirs(os.path.dirname(real_file), exist_ok=True)
             blob.download_to_filename(real_file)
@@ -44,13 +46,18 @@ def download_images(images, bucket):
                 real_file = f'{filename}_p{i}.png'
                 blob = bucket.blob(real_file)
                 if not blob.exists():
+                    if i == 1:
+                        ignore_idx.append(idx)
                     break
                 os.makedirs(os.path.dirname(real_file), exist_ok=True)
                 blob.download_to_filename(real_file)
                 real_files.append(real_file)
                 i += 1
 
-    return real_files
+    idx = np.ones(len(images)).astype(bool)
+    idx[ignore_idx] = False
+
+    return real_files, idx
 
 
 def merge_pages(images, size=(1653, 2339)):

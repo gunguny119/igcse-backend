@@ -84,26 +84,29 @@ def generate_pastpaper():
         'component6': component6['screenshot_path'].to_list()
     }
 
-    component2_pdf, num_questions = process_pdf(images['component2'], bucket, subject,
-                                                topic_list, options[0])
-    component4_pdf, _ = process_pdf(images['component4'], bucket, subject, topic_list,
-                                    options[1])
-    component6_pdf, _ = process_pdf(images['component6'], bucket, subject, topic_list,
-                                    options[2])
+    component2_pdf, num_questions, idx = process_pdf(images['component2'], bucket,
+                                                     subject, topic_list, options[0])
+    component2 = component2[idx]
+    component4_pdf, _, idx = process_pdf(images['component4'], bucket, subject,
+                                         topic_list, options[1])
+    component4 = component4[idx]
+    component6_pdf, _, idx = process_pdf(images['component6'], bucket, subject,
+                                         topic_list, options[2])
+    component6 = component6[idx]
 
-    component2_ms = component2[['question_number','answer']].values.tolist()
-    component4_ms, _ = process_pdf(component4['ms_path'].to_list(),
-                                   bucket,
-                                   subject,
-                                   topic_list,
-                                   options[1],
-                                   ms=True)
-    component6_ms, _ = process_pdf(component6['ms_path'].to_list(),
-                                   bucket,
-                                   subject,
-                                   topic_list,
-                                   options[2],
-                                   ms=True)
+    component2_ms = component2[['question_number', 'answer']].values.tolist()
+    component4_ms, _, _ = process_pdf(component4['ms_path'].to_list(),
+                                      bucket,
+                                      subject,
+                                      topic_list,
+                                      options[1],
+                                      ms=True)
+    component6_ms, _, _ = process_pdf(component6['ms_path'].to_list(),
+                                      bucket,
+                                      subject,
+                                      topic_list,
+                                      options[2],
+                                      ms=True)
 
     pdfs = {
         'component2': component2_pdf,
