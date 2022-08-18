@@ -41,17 +41,17 @@ APP_ROOT = os.getenv('APP_ROOT', '/generate')
 def generate_pastpaper():
     data = request.json
     topic_list = data.get('topics')
-    options = data.get('options')  # 21, 41, 61...
+    options = [2, 4, 6]  # 21, 41, 61...
     subject = data.get('subject').lower()
 
     df = all_df[subject]['df']
     grade_threshold = all_df[subject]['grade_threshold']
 
-    topic_df = df[df['topic'].isin(topic_list) | (df['component'] == options[2])]
+    topic_df = df[df['topic'].isin(topic_list) | (df['component'].isin(61, 62, 63))]
 
-    component2 = topic_df[topic_df['component'] == options[0]]
-    component4 = topic_df[topic_df['component'] == options[1]]
-    component6 = topic_df[topic_df['component'] == options[2]]
+    component2 = topic_df[topic_df['component'].isin(21, 22, 23)]
+    component4 = topic_df[topic_df['component'].isin(41, 42, 43)]
+    component6 = topic_df[topic_df['component'].isin(61, 62, 63)]
 
     component2_questions = []
     for i in range(1, 41):
