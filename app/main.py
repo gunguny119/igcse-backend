@@ -94,7 +94,7 @@ def generate_pastpaper():
                                          topic_list, options[2])
     component6 = component6[idx]
 
-    component2_ms = component2[['question_number', 'answer']].values.tolist()
+    component2_ms = component2[['question number', 'answer']].values.tolist()
     component4_ms, _, _ = process_pdf(component4['ms_path'].to_list(),
                                       bucket,
                                       subject,
