@@ -33,6 +33,7 @@ def load_data(subject):
 
     return {'df': df, 'grade_threshold': grade_threshold}
 
+
 #https://www, if we have /generate, send our data to the url
 APP_ROOT = os.getenv('APP_ROOT', '/generate')
 
@@ -54,7 +55,6 @@ def generate_pastpaper():
     component4 = topic_df[topic_df['component'].isin([41, 42, 43])]
     component6 = topic_df[topic_df['component'].isin([61, 62, 63])]
 
-
     component6_questions = []
     for i in range(1, 5):
         q = component6[component6['question number'] == i]
@@ -62,22 +62,19 @@ def generate_pastpaper():
             continue
         component6_questions.append(q.sample(1))
 
-    if len(component2)>40:
+    if len(component2) > 40:
         component2 = component2.sample(40)
-
 
     if subject == 'chemistry':
         num_sample = 7
     elif subject == 'physics':
-        num_sample =  8
+        num_sample = 8
     elif subject == 'biology':
         num_sample = 8
 
-    if len(component4)>num_sample:
+    if len(component4) > num_sample:
         component4 = component4.sample(num_sample)
 
-    
-   
     component2 = component2.sort_values('question number')
     component4 = component4.sort_values('question number')
     component6 = pd.concat(component6_questions)
