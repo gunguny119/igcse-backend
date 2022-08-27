@@ -53,19 +53,6 @@ def generate_pastpaper():
     component4 = topic_df[topic_df['component'].isin([41, 42, 43])]
     component6 = topic_df[topic_df['component'].isin([61, 62, 63])]
 
-    component2_questions = []
-    for i in range(1, 41):
-        q = component2[component2['question number'] == i]
-        if len(q) == 0:
-            continue
-        component2_questions.append(q.sample(1))
-
-    component4_questions = []
-    for i in range(1, 12):
-        q = component4[component4['question number'] == i]
-        if len(q) == 0:
-            continue
-        component4_questions.append(q.sample(1))
 
     component6_questions = []
     for i in range(1, 5):
@@ -74,8 +61,24 @@ def generate_pastpaper():
             continue
         component6_questions.append(q.sample(1))
 
-    component2 = pd.concat(component2_questions)
-    component4 = pd.concat(component4_questions)
+    if len(component2)>40:
+        component2 = component2.sample(40)
+
+
+    if subject == 'chemistry':
+        num_sample = 7
+    elif subject == 'physics':
+        num_sample =  8
+    elif subject == 'biology':
+        num_sample = 8
+
+    if len(component4)>num_sample:
+        component4 = component4.sample(num_sample)
+
+    
+   
+    component2 = component2.sort_values('question number')
+    component4 = component4.sort_values('question number')
     component6 = pd.concat(component6_questions)
 
     images = {
