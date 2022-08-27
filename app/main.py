@@ -25,6 +25,8 @@ def load_data(subject):
         return
     df = pd.read_csv(f'{cur_path}/../data/{subject}_data.csv')
     df = df[~df['screenshot_path'].isna()]
+    if subject == 'physics' or subject == 'biology':
+        df = df[df['year']>=2019]
 
     grade_threshold = pd.read_csv(f'{cur_path}/../data/{subject}_grade_thresholds.csv')
     grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G'
