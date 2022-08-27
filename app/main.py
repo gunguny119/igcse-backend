@@ -18,11 +18,11 @@ bucket = storage.bucket()
 
 cur_path = os.path.dirname(__file__)
 #load data
-all_df = {}
 
-for subject in ['chemistry', 'physics', 'biology']:
+
+def load_data(subject):
     if not os.path.isfile(f'{cur_path}/../data/{subject}_data.csv'):
-        continue
+        return
     df = pd.read_csv(f'{cur_path}/../data/{subject}_data.csv')
     df = df[~df['screenshot_path'].isna()]
 
@@ -31,7 +31,7 @@ for subject in ['chemistry', 'physics', 'biology']:
                     ]] = grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G']] / 200
     grade_threshold = grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G']].mean()
 
-    all_df[subject] = {'df': df, 'grade_threshold': grade_threshold}
+    return {'df': df, 'grade_threshold': grade_threshold}
 
 #https://www, if we have /generate, send our data to the url
 APP_ROOT = os.getenv('APP_ROOT', '/generate')
@@ -44,8 +44,9 @@ def generate_pastpaper():
     options = [2, 4, 6]  # 21, 41, 61...
     subject = data.get('subject').lower()
 
-    df = all_df[subject]['df']
-    grade_threshold = all_df[subject]['grade_threshold']
+    loaded_data = load_data(subject)
+    df = loaded_data['df']
+    grade_threshold = loaded_data['grade_threshold']
 
     topic_df = df[df['topic'].isin(topic_list) | (df['component'].isin([61, 62, 63]))]
 
