@@ -24,16 +24,17 @@ def load_data(subject):
     if not os.path.isfile(f'{cur_path}/../data/{subject}_data.csv'):
         return
     df = pd.read_csv(f'{cur_path}/../data/{subject}_data.csv')
+    df = df.drop(columns=['text'])
     df = df[~df['screenshot_path'].isna()]
     if subject == 'physics' or subject == 'biology':
-        df = df[df['year']>=2019]
+        df = df[df['year'] >= 2019]
 
     grade_threshold = pd.read_csv(f'{cur_path}/../data/{subject}_grade_thresholds.csv')
     grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G'
                     ]] = grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G']] / 200
     grade_threshold = grade_threshold[['A*', 'A', 'B', 'C', 'D', 'E', 'F', 'G']].mean()
 
-    return {'df': df, 'grade_threshold': grade_threshold}
+    return df, grade_threshold
 
 
 #https://www, if we have /generate, send our data to the url
@@ -47,9 +48,7 @@ def generate_pastpaper():
     options = [2, 4, 6]  # 21, 41, 61...
     subject = data.get('subject').lower()
 
-    loaded_data = load_data(subject)
-    df = loaded_data['df']
-    grade_threshold = loaded_data['grade_threshold']
+    df, grade_threshold = load_data(subject)
 
     topic_df = df[df['topic'].isin(topic_list) | (df['component'].isin([61, 62, 63]))]
 
