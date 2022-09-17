@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-CMD ["gunicorn", "run:app", "--workers", "1", "--timeout", "90"]
+CMD ["gunicorn", "run:app", "--workers", "1", "--timeout", "180"]
