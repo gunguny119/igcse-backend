@@ -69,13 +69,14 @@ def merge_pages(images, size=(1653, 2339)):
             first_arr = np.array(first)[:, :size[0]]
             first_arr = np.pad(first_arr,
                                ((0, 0), (0, size[0] - first_arr.shape[1]), (0, 0)),
-                               constant_values=255),
+                               constant_values=255)
+            img_arr = np.array(img)[:, :size[0]]
+            img_arr = np.pad(img_arr, ((0, 0), (0, size[0] - img_arr.shape[1]), (0, 0)),
+                             constant_values=255)
             first = np.concatenate([
                 first_arr,
                 np.full((100, size[0], 3), 255, dtype=np.uint8),
-                np.pad(np.array(img)[:, :size[0]],
-                       ((0, 0), (0, size[0] - first.size[0]), (0, 0)),
-                       constant_values=255)
+                img_arr,
             ])
             first = Image.fromarray(first, 'RGB')
 
